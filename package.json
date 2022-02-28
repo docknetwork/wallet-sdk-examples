@@ -4,14 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx babel-node ./index.js --ignore \"/node_modules/(?!@polkadot|@babel|@docknetwork|@digitalbazaar)\"",
-    "postinstall": "node ./scripts/link-sdk"
+    "start": "npx @babel/node ./index.js --ignore \"/node_modules/(?!@polkadot|@babel|@docknetwork|@digitalbazaar)\""
   },
   "author": "Maycon Mello",
   "license": "ISC",
   "dependencies": {
-    "@docknetwork/wallet-sdk-core": "https://github.com/docknetwork/react-native-sdk#d5aba02d1187500f653c9fa8e24dbcacd0311cf1",
-    "@docknetwork/wallet-sdk-transactions": "https://github.com/docknetwork/react-native-sdk#d5aba02d1187500f653c9fa8e24dbcacd0311cf1"
+    "@docknetwork/wallet-sdk-core": "0.1.3",
+    "@docknetwork/wallet-sdk-transactions": "0.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.12",
