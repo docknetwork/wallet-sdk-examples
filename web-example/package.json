@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^7.1.0",
-    "@docknetwork/wallet-sdk-core": "0.4.0",
+    "@docknetwork/wallet-sdk-core": "0.4.3",
     "@docknetwork/wallet-sdk-data-store": "0.4.0",
-    "@docknetwork/wallet-sdk-wasm":"0.4.0",
+    "@docknetwork/wallet-sdk-wasm":"0.4.3",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",

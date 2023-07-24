@@ -3,4 +3,5 @@
 /dock
 node_modules
 dock.lock
+yarn-error.log
 *.db
