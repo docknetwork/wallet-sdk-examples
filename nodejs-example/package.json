@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@docknetwork/wallet-sdk-core": "0.4.0",
+    "@docknetwork/wallet-sdk-data-store": "0.4.0",
+    "@docknetwork/wallet-sdk-wasm":"0.4.0",
+    "sqlite3": "^5.1.6",
+    "typeorm": "^0.3.17"
+  }
+}
