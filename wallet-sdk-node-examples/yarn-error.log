@@ -1,0 +1,36 @@
+Arguments: 
+  /Users/mayconmellos/.nvm/versions/node/v17.9.1/bin/node /Users/mayconmellos/.nvm/versions/node/v17.9.1/bin/yarn add @mzmellos/logger@0.0.1
+
+PATH: 
+  /Users/mayconmellos/.rvm/gems/ruby-2.7.6/bin:/Users/mayconmellos/.rvm/gems/ruby-2.7.6@global/bin:/Users/mayconmellos/.rvm/rubies/ruby-2.7.6/bin:/Users/mayconmellos/.nvm/versions/node/v17.9.1/bin:/Applications/Visual\ Studio\ Code.app /Contents/Resources/app/bin:/opt/homebrew/opt/openjdk@11/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Apple/usr/bin:/Users/mayconmellos/.rvm/gems/ruby-2.7.6/bin:/Users/mayconmellos/.rvm/gems/ruby-2.7.6@global/bin:/Users/mayconmellos/.rvm/rubies/ruby-2.7.6/bin:/Users/mayconmellos/.nvm/versions/node/v17.9.1/bin:/Applications/Visual\ Studio\ Code.app /Contents/Resources/app/bin:/opt/homebrew/opt/openjdk@11/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/mayconmellos/Library/Android/sdk/emulator:/Users/mayconmellos/Library/Android/sdk/tools:/Users/mayconmellos/Library/Android/sdk/tools/bin:/Users/mayconmellos/Library/Android/sdk/platform-tools:/Users/mayconmellos/.rvm/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/Users/mayconmellos/Library/Android/sdk/emulator:/Users/mayconmellos/Library/Android/sdk/tools:/Users/mayconmellos/Library/Android/sdk/tools/bin:/Users/mayconmellos/Library/Android/sdk/platform-tools:/Users/mayconmellos/.rvm/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  17.9.1
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@mzmellos%2flogger: Not found
+      at Request.params.callback [as _callback] (/Users/mayconmellos/.nvm/versions/node/v17.9.1/lib/node_modules/yarn/lib/cli.js:66145:18)
+      at Request.self.callback (/Users/mayconmellos/.nvm/versions/node/v17.9.1/lib/node_modules/yarn/lib/cli.js:140890:22)
+      at Request.emit (node:events:527:28)
+      at Request.<anonymous> (/Users/mayconmellos/.nvm/versions/node/v17.9.1/lib/node_modules/yarn/lib/cli.js:141862:10)
+      at Request.emit (node:events:527:28)
+      at IncomingMessage.<anonymous> (/Users/mayconmellos/.nvm/versions/node/v17.9.1/lib/node_modules/yarn/lib/cli.js:141784:12)
+      at Object.onceWrapper (node:events:641:28)
+      at IncomingMessage.emit (node:events:539:35)
+      at endReadableNT (node:internal/streams/readable:1345:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
