@@ -3,9 +3,13 @@
     "@docknetwork/sdk": "5.0.2",
     "@docknetwork/wallet-sdk-core": "0.4.3",
     "@docknetwork/wallet-sdk-data-store": "0.4.0",
+    "@docknetwork/wallet-sdk-dids": "^0.2.6",
     "@docknetwork/wallet-sdk-wasm": "0.4.3",
     "sqlite3": "^5.1.6",
     "typeorm": "^0.3.17"
+  },
+  "scripts": {
+    "example:verify-credential": "npx babel-node verify-credential.js"
   },
   "resolutions": {
     "@docknetwork/sdk": "5.0.2"
