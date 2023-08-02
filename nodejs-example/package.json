@@ -1,17 +1,24 @@
 {
   "dependencies": {
+    "@babel/preset-env": "^7.22.9",
     "@docknetwork/sdk": "5.0.2",
     "@docknetwork/wallet-sdk-core": "0.4.3",
     "@docknetwork/wallet-sdk-data-store": "0.4.0",
     "@docknetwork/wallet-sdk-dids": "^0.2.6",
     "@docknetwork/wallet-sdk-wasm": "0.4.3",
+    "babel-node": "^0.0.1-security",
     "sqlite3": "^5.1.6",
     "typeorm": "^0.3.17"
   },
   "scripts": {
-    "example:verify-credential": "npx babel-node verify-credential.js"
+    "example:verify-credential": "npx babel-node verify-credential.js",
+    "example:decrypt-wallet": "npx babel-node decrypt-wallet.js"
   },
   "resolutions": {
     "@docknetwork/sdk": "5.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/node": "^7.22.6"
   }
 }
