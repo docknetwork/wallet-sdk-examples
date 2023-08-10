@@ -1,7 +1,6 @@
 import { createWallet } from "@docknetwork/wallet-sdk-core/lib/wallet";
 import { createAccountProvider } from "@docknetwork/wallet-sdk-core/lib/account-provider";
 
-
 async function main() {
     const wallet = await createWallet({
         databasePath: "data-store",

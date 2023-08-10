@@ -15,15 +15,13 @@
       "experimentalDecorators": true,
       "useUnknownInCatchVariables": false,
       "resolveJsonModule": true,
-      "allowSyntheticDefaultImports": true
+      "allowSyntheticDefaultImports": true,
+      "skipLibCheck": true,                      /* Skip type checking of declaration files. */
+      "outDir": "dist",
     },
     "ts-node": {
       "compilerOptions": {
         "module": "CommonJS"
       }
-    },
-    "exclude": [
-      "**/__tests__/**/*",
-      "**/dist/**/*"
-    ]
+    }
   }  
