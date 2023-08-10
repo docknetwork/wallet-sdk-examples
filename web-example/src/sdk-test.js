@@ -24,10 +24,7 @@ async function main() {
         name: 'test',
     });
 
-    console.log(account);
-
     // manage DIDs
-
     const documents = await wallet.getAllDocuments();
 
     console.log(documents);

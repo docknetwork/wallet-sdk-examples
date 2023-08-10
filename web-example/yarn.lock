@@ -658,7 +658,7 @@
     "@babel/helper-plugin-utils" "^7.22.5"
     "@babel/plugin-syntax-export-namespace-from" "^7.8.3"
 
-"@babel/plugin-transform-flow-strip-types@^7.16.0":
+"@babel/plugin-transform-flow-strip-types@^7.16.0", "@babel/plugin-transform-flow-strip-types@^7.22.5":
   version "7.22.5"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-flow-strip-types/-/plugin-transform-flow-strip-types-7.22.5.tgz#0bb17110c7bf5b35a60754b2f00c58302381dee2"
   integrity sha512-tujNbZdxdG0/54g/oua8ISToaXTFBf8EnSb5PgQSciIXWOWKX3S4+JR7ZE9ol8FZwf9kxitzkGQ+QWeov/mCiA==
@@ -1545,6 +1545,45 @@
     n3 "1.16.2"
     rify "^0.7.1"
 
+"@docknetwork/sdk@5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@docknetwork/sdk/-/sdk-5.0.2.tgz#1ed64e5c57460c13ca81a579b07c35c61096a340"
+  integrity sha512-QQsrSq1R9En48aDZGKKYrETkFFyPHiifkHqLEizyJoUwsFjFRqQqqCCDju226vopOnyYTzK912szg9VxlMigxw==
+  dependencies:
+    "@docknetwork/crypto-wasm-ts" "^0.33.3"
+    "@docknetwork/node-types" "^0.16.0"
+    "@juanelas/base64" "^1.0.5"
+    "@polkadot/api" "9.7.1"
+    "@polkadot/keyring" "10.1.11"
+    "@polkadot/rpc-provider" "9.7.1"
+    "@polkadot/types" "9.7.1"
+    "@polkadot/types-known" "9.7.1"
+    "@polkadot/util" "10.1.11"
+    "@polkadot/util-crypto" "10.1.11"
+    "@polkadot/x-fetch" "10.1.11"
+    "@polkadot/x-randomvalues" "10.1.11"
+    "@polkadot/x-textdecoder" "10.1.11"
+    "@polkadot/x-textencoder" "10.1.11"
+    "@polkadot/x-ws" "10.1.11"
+    "@transmute/json-web-signature" "^0.7.0-unstable.80"
+    axios "0.27.2"
+    base64url "3.0.1"
+    blake2b "2.1.4"
+    bs58 "5.0.0"
+    deep-equal "2.0.5"
+    dotenv "16.0.1"
+    elliptic "6.5.4"
+    flat "^5.0.2"
+    js-sha256 "0.9.0"
+    json-canonicalize "1.0.4"
+    jsonld "^5.0.0"
+    jsonld-signatures "^9.3.1"
+    jsonschema "1.4.1"
+    key-did-resolver "^1.4.0"
+    mrklt "^0.2.0"
+    n3 "1.16.2"
+    rify "^0.7.1"
+
 "@docknetwork/universal-wallet@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@docknetwork/universal-wallet/-/universal-wallet-2.0.1.tgz#60f24db09c540dc8a3cc0ef8cbabdcc9dbb8d800"
@@ -1560,27 +1599,52 @@
     babel-polyfill "^6.26.0"
     base58-universal "1.0.0"
 
-"@docknetwork/wallet-sdk-core@//Users/mayconmellos/dev/dock/wallet-sdk/packages/core":
-  version "0.3.10"
+"@docknetwork/wallet-sdk-core@0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-core/-/wallet-sdk-core-0.4.4.tgz#4763367ebd18081303cdaa5601b19f08c6018fd4"
+  integrity sha512-1dr2PvAiBI8YjMttvLrZTrTQ1meJYSplW7GX5CGEhE8RCTzsqWAVsi6UQxo5goaET6KB/HioLr+H5JZkZANWmw==
   dependencies:
-    "@docknetwork/wallet-sdk-wasm" "^0.3.8"
+    "@docknetwork/wallet-sdk-wasm" "^0.4.3"
 
-"@docknetwork/wallet-sdk-core@file:../wallet-sdk/packages/core":
-  version "0.3.10"
-  dependencies:
-    "@docknetwork/wallet-sdk-wasm" "^0.3.8"
-
-"@docknetwork/wallet-sdk-data-store@0.3.9":
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-data-store/-/wallet-sdk-data-store-0.3.9.tgz#3b0cdb031be7b064bfa4de2efaeb45f6a83f451d"
-  integrity sha512-/Uh8t8UHH42teViIPEHdyHs14HIfDqZdoU8Ht5Cs5jGNnrUQyK67WKdm8mWhzU+URPoZAIsfer/G2PWhTT654Q==
+"@docknetwork/wallet-sdk-data-store@0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-data-store/-/wallet-sdk-data-store-0.4.4.tgz#9d682bfa287c95ab866431214c0e82e66cf3352c"
+  integrity sha512-wH96QWmQUUo9VRsmME6G4uB7EG/oQOGnma5wamzZXADCQk5js4TKKlkuf6PboDTK4WSBslUFfqfuU7qeg4lkkA==
   dependencies:
     uuid "^8.3.2"
 
-"@docknetwork/wallet-sdk-wasm@0.3.8", "@docknetwork/wallet-sdk-wasm@^0.3.8":
-  version "0.3.8"
-  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-wasm/-/wallet-sdk-wasm-0.3.8.tgz#7c691f30f8d52fc8f60e940a137d02ddba381846"
-  integrity sha512-CRvqDNFpg5fMvXLCZ+iiE1igcRurPjSmkU5TTpDadwXqrIcdvrSQidVKj98KzTTGEN58P2pCTi/HVvHhXTatmQ==
+"@docknetwork/wallet-sdk-wasm@0.4.4":
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-wasm/-/wallet-sdk-wasm-0.4.4.tgz#2ad881b20e45f7c8b7229750d99a81956b08c8dd"
+  integrity sha512-yI7Zsc7fvYk4Q3GB24xiGKOk3TvSj/ERzzfIyCapUycu1jvowjXy+9CbCT9rEBCF5lwDwxz3EBIfMSnZdsto5g==
+  dependencies:
+    "@docknetwork/sdk" "5.0.2"
+    "@docknetwork/universal-wallet" "^2.0.1"
+    "@polkadot/api" "9.7.1"
+    "@polkadot/keyring" "10.1.11"
+    "@polkadot/rpc-core" "9.7.1"
+    "@polkadot/rpc-provider" "9.7.1"
+    "@polkadot/types" "9.7.1"
+    "@polkadot/types-known" "9.7.1"
+    "@polkadot/ui-shared" "3.4.1"
+    "@polkadot/util" "10.1.11"
+    "@polkadot/util-crypto" "10.1.11"
+    "@polkadot/wasm-crypto" "6.3.1"
+    "@sphereon/pex" "^1.1.4"
+    axios "^0.25.0"
+    axios-retry "^3.2.5"
+    babel-node "^0.0.1-security"
+    bignumber.js "^9.0.1"
+    cwait "1.1.2"
+    json-rpc-2.0 "^0.2.16"
+    react-native-keychain "^8.0.0"
+    uuid "^8.3.2"
+    winston "^3.3.3"
+
+"@docknetwork/wallet-sdk-wasm@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-wasm/-/wallet-sdk-wasm-0.4.3.tgz#6033f10028cbcf68d5dac9e3f344989305d468cf"
+  integrity sha512-CxgbgBA0umiBD+zuaqKTQpu5gT1ix24CQAMdpQuGi5AXPVt3D0YCL/L/HfzyMuYU99ImOJh5y+DsBSiivdOHIg==
   dependencies:
     "@docknetwork/sdk" "5.0.0"
     "@docknetwork/universal-wallet" "^2.0.1"
@@ -2283,6 +2347,14 @@
     "@polkadot/util" "^10.1.11"
     "@polkadot/util-crypto" "^10.1.11"
     rxjs "^7.5.7"
+
+"@polkadot/ui-shared@3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/ui-shared/-/ui-shared-3.4.1.tgz#902e47f0d784a571a33bc235a40b2ef5598bf392"
+  integrity sha512-79nXPAxYuQOs4aEwLVrLzbX6syQyn765bdZRbJysudHr0o+UIVWmfHg2OPGp4Q2JlyvwuJ0ta9tJAGIZ4n/UsA==
+  dependencies:
+    colord "^2.9.3"
+    tslib "^2.5.0"
 
 "@polkadot/ui-shared@^0.87.5":
   version "0.87.7"
@@ -4865,7 +4937,7 @@ color@^3.1.3, color@^3.2.1:
     color-convert "^1.9.3"
     color-string "^1.6.0"
 
-colord@^2.9.1:
+colord@^2.9.1, colord@^2.9.3:
   version "2.9.3"
   resolved "https://registry.yarnpkg.com/colord/-/colord-2.9.3.tgz#4f8ce919de456f1d5c1c368c307fe20f3e59fb43"
   integrity sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==
@@ -11596,6 +11668,11 @@ typeorm@^0.3.17:
     tslib "^2.5.0"
     uuid "^9.0.0"
     yargs "^17.6.2"
+
+typescript@^5.1.6:
+  version "5.1.6"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.1.6.tgz#02f8ac202b6dad2c0dd5e0913745b47a37998274"
+  integrity sha512-zaWCozRZ6DLEWAWFrVDz1H6FVXzUSfTy5FUMWsQlU8Ym5JP9eO4xkTIROFCQvhQf61z6O/G6ugw3SgAnvvm+HA==
 
 uint8arrays@^2.0.5:
   version "2.1.10"
