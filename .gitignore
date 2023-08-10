@@ -1,5 +1,7 @@
 /local-storage
 /dock.management
 /dock
-/node_modules
+node_modules
 dock.lock
+yarn-error.log
+*.db

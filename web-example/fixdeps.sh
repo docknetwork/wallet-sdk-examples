@@ -1,0 +1,1 @@
+cp -rf ../crypto-wasm-ts/src ./node_modules/@docknetwork/crypto-wasm-ts/
