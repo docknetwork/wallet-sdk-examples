@@ -12,5 +12,5 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Assets
 
-The `assets` directory hauses the wallet-sdk js library. And flutter can access that using a webview.
+The [assets](assets) directory houses the wallet-sdk js library. And flutter can access that using a webview.
 
