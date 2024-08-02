@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+    <html>
+      <head>
+        <title>Local HTML</title>
+      </head>
+      <body>
+        <h1>Hello from a local HTML file! static file</h1>
+        <script type="text/javascript" src="bundle.js">
+        </script>
+        <script>
+          handleEvent({
+            data: {
+              type: 'json-rpc-request',
+              body: {
+                jsonrpc: '2.0',
+                method: 'dock.init',
+                params: {__args: [{address: 'wss://knox-1.dock.io'}]},
+                id: 3,
+              },
+            },
+          });
+
+          handleEvent({
+            data: {
+              type: 'json-rpc-request',
+              body: {
+                jsonrpc: '2.0',
+                method: 'keyring.initialize',
+                params: {__args: [{ss58Format: 21}]},
+                id: 2,
+              },
+            },
+          });
+
+          // The WalletSDK will call this function to send messages to Flutter
+          window.ReactNativeWebView = {
+            postMessage: function (message) {
+              Toaster.postMessage(JSON.stringify(message));
+            },
+          }
+
+          // Listen for messages from Flutter
+          window.addEventListener('message', function(event) {
+            console.log('Received event', event.data);
+            handleEvent({
+              data: JSON.parse(event.data),
+            });
+          });
+        </script>
+      </body>
+    </html>
