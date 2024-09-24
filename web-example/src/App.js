@@ -118,7 +118,6 @@ function App() {
     setCredentialProvider(credentialProvider);
     setWallet(wallet);
     setLoading(false);
-    syncDocsWithEDV(wallet, _cloudWallet);
   }
 
   useEffect(() => {
