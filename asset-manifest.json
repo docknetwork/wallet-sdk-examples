@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.05c3b073.css",
+    "main.js": "/static/js/main.edd56db8.js",
+    "static/js/27.90d4fbac.chunk.js": "/static/js/27.90d4fbac.chunk.js",
+    "static/media/axios.cjs": "/static/media/axios.0fd5060ee28a257d32a2.cjs",
+    "index.html": "/index.html",
+    "static/media/index.cjs": "/static/media/index.cd351d7c31d0d3fccf96.cjs"
+  },
+  "entrypoints": [
+    "static/css/main.05c3b073.css",
+    "static/js/main.edd56db8.js"
+  ]
+}
