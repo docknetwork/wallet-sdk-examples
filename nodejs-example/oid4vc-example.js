@@ -11,7 +11,7 @@ import {
 import {WalletEvents} from '@docknetwork/wallet-sdk-wasm/lib/modules/wallet'
 import assert from 'assert';
 
-const credentialOfferUrl = process.env.CREDENTIAL_OFFER_URL; // Replace with the credential offer URL. Check Readme for more details
+const credentialOfferUrl = process.env.CREDENTIAL_OFFER_URL;
 
 assert(!!credentialOfferUrl, 'Please define the OID4VC URL');
 
@@ -41,9 +41,6 @@ async function main() {
   });
 
   console.log('Fetching the credential from the OID4VC issuer');
-
-  // OID4VC Url
-  // This URL can be rendered as a QR Code
 
   await credentialProvider.importCredentialFromURI({
     uri: credentialOfferUrl,
