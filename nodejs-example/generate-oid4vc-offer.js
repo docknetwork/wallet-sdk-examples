@@ -2,6 +2,7 @@ const axios = require("axios").default;
 
 const API_KEY = process.env.CERTS_API_KEY;
 const API_URL = process.env.CERTS_API_URL;
+const ISSUER_DID = process.env.ISSUER_DID;
 
 const requestOptions = {
   headers: {
@@ -27,7 +28,7 @@ async function createOpenIDIssuer() {
           issuanceDate: "2024-08-09T14:15:22Z",
           expirationDate: "2099-08-24T14:15:22Z",
           schema: "https://schema.dock.io/Test-V1-1701450859791.json",
-          issuer: "did:dock:5CkQ14QjBuuidYJPC7uRMhN1Hrtv3kTLuUx8dGsnNgm4RtT5",
+          issuer: ISSUER_DID,
         },
       },
     });
@@ -38,22 +39,22 @@ async function createOpenIDIssuer() {
   }
 }
 
-async function generateOID4VCOffer() {
+async function generateOID4VCOffer(issuerID) {
   try {
     const response = await apiClient.post("/openid/credential-offers", {
-      id: "2baff124-6681-428b-b5a1-449f211d9624",
+      id: issuerID,
     });
     console.log(`OID4VC offer ${response.data.id} was created.`);
     console.log(`Copy your OID4VC URL: ${response.data.url}`);
-    return response.data;
+    return response.data.url;
   } catch (error) {
     console.error("Failed to generate OID4VC offer:", error);
   }
 }
 
 async function main() {
-  await createOpenIDIssuer();
-  await generateOID4VCOffer();
+  const openIDIssuer = await createOpenIDIssuer();
+  const url = await generateOID4VCOffer(openIDIssuer.id);
 }
 
 main();

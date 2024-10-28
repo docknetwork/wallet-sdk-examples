@@ -17,8 +17,9 @@ You can read more about OID4VC in [our docs](https://docs.dock.io/developer-docu
 To get started, define your environment variables to access the Certs API:
 
 ```bash
-export CERTS_API_KEY=<Your_CERTS_API_KEY>
+export CERTS_API_KEY=<Your Certs API Key>
 export CERTS_API_URL=https://api.dock.io
+export ISSUER_DID=<Issuer DID>
 ```
 
 Next, generate the OpenID issuer and the credential offer by running the following command:
