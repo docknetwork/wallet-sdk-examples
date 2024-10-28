@@ -9,6 +9,11 @@ import {
   createDIDProvider,
 } from "@docknetwork/wallet-sdk-core/lib/did-provider";
 import {WalletEvents} from '@docknetwork/wallet-sdk-wasm/lib/modules/wallet'
+import assert from 'assert';
+
+const credentialOfferUrl = process.env.CREDENTIAL_OFFER_URL; // Replace with the credential offer URL. Check Readme for more details
+
+assert(!!credentialOfferUrl, 'Please define the OID4VC URL');
 
 async function main() {
   const dataStore = await createDataStore({
@@ -39,9 +44,9 @@ async function main() {
 
   // OID4VC Url
   // This URL can be rendered as a QR Code
-  const credentialUrl = 'openid-credential-offer://?credential_offer=%7B%22credential_issuer%22%3A%22https%3A%2F%2Fapi-staging.dock.io%2Fopenid%2Fissuers%2F2baff124-6681-428b-b5a1-449f211d9624%22%2C%22credentials%22%3A%5B%22ldp_vc%3AMyCredential%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%22bN3fNhSP0TnVoGgYzn0lOsVq-hQCmelt3AvDa-TA3n0%22%2C%22user_pin_required%22%3Afalse%7D%7D%7D';
+
   await credentialProvider.importCredentialFromURI({
-    uri: credentialUrl,
+    uri: credentialOfferUrl,
     didProvider,
   });
 
