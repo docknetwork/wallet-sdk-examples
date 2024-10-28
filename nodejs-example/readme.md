@@ -21,6 +21,9 @@ export CERTS_API_KEY=<Your Certs API Key>
 export CERTS_API_URL=https://api.dock.io
 export ISSUER_DID=<Issuer DID>
 ```
+Note: 
+* API keys can be defined on the [API Keys](https://certs.dock.io/keys) page in Certs
+* Issuer DIDs can be viewed on the [Organization Profiles](https://certs.dock.io/dids) page in Certs 
 
 Next, generate the OpenID issuer and the credential offer by running the following command:
 
