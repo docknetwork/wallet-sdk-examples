@@ -13,7 +13,8 @@
     "typeorm": "^0.3.20"
   },
   "scripts": {
-    "example": "npx babel-node example.js"
+    "verification-example": "npx babel-node verification-example.js",
+    "oid4vc-example": "npx babel-node oid4vc-example.js"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
