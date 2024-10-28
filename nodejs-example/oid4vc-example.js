@@ -43,7 +43,7 @@ async function main() {
   await credentialProvider.importCredentialFromURI({
     uri: credentialUrl,
     didProvider,
-  })
+  });
 
   console.log('Credential added to the wallet!')
 
