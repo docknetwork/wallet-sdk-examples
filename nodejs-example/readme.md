@@ -9,7 +9,7 @@ yarn install
 
 ## OID4VC Example
 
-In this example, we will show how to use OID4VC to import credentials and then list them using the SDK.
+In this example, we will show how to use OID4VC to import credentials and then list them using the Wallet SDK.
 You can read more about OID4VC in [our docs](https://docs.dock.io/developer-documentation/key-standards/interoperability-with-openid/openid-issuance-and-verification-integration-guide)
 
 ### Step 1: Generate an OpenID Issuer and Credential Offer
