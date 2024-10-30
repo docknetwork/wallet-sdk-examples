@@ -79,7 +79,9 @@ class JsonRpcWebViewState extends State<JsonRpcWebView> {
                 'Page resource error: code: ${error.errorCode}, description: ${error.description}');
           },
           onNavigationRequest: (NavigationRequest request) {
-            // Block navigation to YouTube links; allow all other navigation requests
+            // TODO: For production use we should block all external URLs
+            // There is no reason for any external URL to be loaded in the WebView
+            // And that is be a security risk
             if (request.url.startsWith('https://www.youtube.com/')) {
               debugPrint('blocking navigation to ${request.url}');
               return NavigationDecision.prevent;
