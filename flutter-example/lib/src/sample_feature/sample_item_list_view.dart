@@ -65,6 +65,9 @@ class _SampleItemListViewState extends State<SampleItemListView> {
       _isLoading = true;
     });
 
+    // Sample QR code data for demonstration purposes. 
+    // You should replace this with the actual QR data obtained from a QR code scanner when ready.
+    // The scanned data will be passed to the `importCredential` method.
     const qrCodeData =
         "openid-credential-offer://?credential_offer=%7B%22credential_issuer%22%3A%22https%3A%2F%2Fapi-staging.dock.io%2Fopenid%2Fissuers%2F2baff124-6681-428b-b5a1-449f211d9624%22%2C%22credentials%22%3A%5B%22ldp_vc%3AMyCredential%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%226HzsUcLtsnHmy1wlZ9GySRXcFcTh0haAi_5i98svGaE%22%2C%22user_pin_required%22%3Afalse%7D%7D%7D";
     // Call `importCredential` with a sample QR code URL
