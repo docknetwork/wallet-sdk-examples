@@ -1,166 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_android/webview_flutter_android.dart';
-import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'dart:io';
-
-class JsonRpcWebView extends StatefulWidget {
-  final Function(String) onMessageReceived;
-
-  const JsonRpcWebView({Key? key, required this.onMessageReceived})
-      : super(key: key);
-
-  @override
-  _JsonRpcWebViewState createState() => _JsonRpcWebViewState();
-}
-
-class _JsonRpcWebViewState extends State<JsonRpcWebView> {
-  late final WebViewController _controller;
-  DateTime? _webViewLoadStartTime;
-  DateTime? _rpcRequestStartTime;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeWebView();
-  }
-
-  Future<void> _initializeWebView() async {
-    _webViewLoadStartTime = DateTime.now(); // Start timing the WebView load
-    late final PlatformWebViewControllerCreationParams params;
-    if (WebViewPlatform.instance is WebKitWebViewPlatform) {
-      params = WebKitWebViewControllerCreationParams(
-        allowsInlineMediaPlayback: true,
-        mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
-      );
-    } else {
-      params = const PlatformWebViewControllerCreationParams();
-    }
-
-    final WebViewController controller =
-        WebViewController.fromPlatformCreationParams(params);
-
-    controller
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            debugPrint('WebView is loading (progress : $progress%)');
-          },
-          onPageStarted: (String url) {
-            debugPrint('Page started loading: $url');
-          },
-          onPageFinished: (String url) {
-            final loadDuration =
-                DateTime.now().difference(_webViewLoadStartTime!);
-            debugPrint(
-                'Page finished loading: $url in ${loadDuration.inMilliseconds} ms');
-          },
-          onWebResourceError: (WebResourceError error) {
-            debugPrint('''
-Page resource error:
-  code: ${error.errorCode}
-  description: ${error.description}
-  errorType: ${error.errorType}
-  isForMainFrame: ${error.isForMainFrame}
-            ''');
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith('https://www.youtube.com/')) {
-              debugPrint('blocking navigation to ${request.url}');
-              return NavigationDecision.prevent;
-            }
-            debugPrint('allowing navigation to ${request.url}');
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..addJavaScriptChannel(
-        'Toaster',
-        onMessageReceived: (JavaScriptMessage message) {
-          if (_rpcRequestStartTime != null) {
-           
-          final rpcDuration = DateTime.now().difference(_rpcRequestStartTime!);
-          debugPrint(
-              'RPC response received in ${rpcDuration.inMilliseconds} ms');
-
-          }
-          widget.onMessageReceived(message.message);
-        },
-      );
-
-    if (controller.platform is AndroidWebViewController) {
-      AndroidWebViewController.enableDebugging(true);
-      (controller.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
-    }
-
-    _controller = controller;
-    _loadLocalHtml();
-  }
-
-  Future<void> _loadLocalHtml() async {
-    final directory = await getApplicationDocumentsDirectory();
-    final targetDir = Directory('${directory.path}/dock-sdk');
-
-    if (!await targetDir.exists()) {
-      await targetDir.create(recursive: true);
-    }
-
-    final assetManifest = await rootBundle.loadString('AssetManifest.json');
-    final assets = Map<String, dynamic>.from(json.decode(assetManifest));
-
-    final List<String> files =
-        assets.keys.where((key) => key.startsWith('assets/dock-sdk/')).toList();
-
-    for (final asset in files) {
-      final data = await rootBundle.load(asset);
-      final bytes = data.buffer.asUint8List();
-      final file = File('${targetDir.path}/${asset.split('/').last}');
-      await file.writeAsBytes(bytes, flush: true);
-    }
-
-    final indexPath = '${targetDir.path}/index.html';
-    _controller.loadFile(indexPath);
-    // Every update made in the webivew code, requires a rebuild in the flutter app
-    // To improve the development experience, you can load the webivew code from a local server
-    // Uncomment the line below and replace the IP address with your local IP address
-    // Make sure to run the local server before uncommenting the line below
-    // _controller.loadRequest(Uri.parse("http://192.168.1.117:8080/index.html"));
-  }
-
-  String _generateJsonRpcRequest(
-      String method, Map<String, dynamic> args, int id) {
-    final request = {
-      "type": "json-rpc-request",
-      "body": {
-        "jsonrpc": "2.0",
-        "method": method,
-        "params": {
-          "__args": [args]
-        },
-        "id": id
-      }
-    };
-    return jsonEncode(request);
-  }
-
-  void sendRpcMessage(String method, Map<String, dynamic> args, int id) {
-    _rpcRequestStartTime = DateTime.now(); // Start timing the RPC request
-    final jsonRpcRequest = _generateJsonRpcRequest(method, args, id);
-    final script = 'window.postMessage(${jsonEncode(jsonRpcRequest)}, "*");';
-    _controller.runJavaScript(script);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WebViewWidget(controller: _controller);
-  }
-}
+import 'json_rpc_webview.dart';
 
 class SampleItemListView extends StatefulWidget {
   const SampleItemListView({
@@ -169,7 +8,6 @@ class SampleItemListView extends StatefulWidget {
   });
 
   static const routeName = '/';
-
   final List<SampleItem> items;
 
   @override
@@ -177,77 +15,139 @@ class SampleItemListView extends StatefulWidget {
 }
 
 class _SampleItemListViewState extends State<SampleItemListView> {
-  final GlobalKey<_JsonRpcWebViewState> _webViewKey =
-      GlobalKey<_JsonRpcWebViewState>();
-  String _rpcResponse = '';
+  final GlobalKey<JsonRpcWebViewState> _webViewKey =
+      GlobalKey<JsonRpcWebViewState>();
+  List<dynamic> _credentials = []; // Store the list of credentials
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCredentialsOnLoad(); // Fetch credentials on app load
+  }
+
+  Future<void> _fetchCredentialsOnLoad() async {
+    await _fetchCredentials(); // Fetch credentials and update the UI
+  }
+
+  Future<void> _fetchCredentials() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Fetch credentials from WebView using `getCredentials` method
+    final response =
+        await _webViewKey.currentState?.sendRpcMessage("getCredentials", {});
+
+    // Parse the credentials
+    final credentials = response?['body']?['result'] ?? [];
+
+    // Update state with parsed credentials
+    setState(() {
+      _credentials = credentials;
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _clearData() async {
+    // Clear credentials data using `clearData` method
+    await _webViewKey.currentState?.sendRpcMessage("clearData", {});
+
+    // Update UI after clearing data
+    setState(() {
+      _credentials = []; // Clear credentials list in UI
+      _isLoading = false;
+    });
+  }
+
+  Future<void> _importCredential() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    // Sample QR code data for demonstration purposes. 
+    // You should replace this with the actual QR data obtained from a QR code scanner when ready.
+    // The scanned data will be passed to the `importCredential` method.
+    const qrCodeData =
+        "openid-credential-offer://?credential_offer=%7B%22credential_issuer%22%3A%22https%3A%2F%2Fapi-staging.dock.io%2Fopenid%2Fissuers%2F2baff124-6681-428b-b5a1-449f211d9624%22%2C%22credentials%22%3A%5B%22ldp_vc%3AMyCredential%22%5D%2C%22grants%22%3A%7B%22urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Apre-authorized_code%22%3A%7B%22pre-authorized_code%22%3A%226HzsUcLtsnHmy1wlZ9GySRXcFcTh0haAi_5i98svGaE%22%2C%22user_pin_required%22%3Afalse%7D%7D%7D";
+    // Call `importCredential` with a sample QR code URL
+    await _webViewKey.currentState?.sendRpcMessage(
+      "importCredential",
+      {"credentialOfferUrl": qrCodeData},
+    );
+
+    // Update the credential list with the new credentials after import
+    await _fetchCredentials();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sample Items'),
+        title: const Text('Credentials'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed:
+                _fetchCredentials, // Refresh button to fetch all credentials
+          ),
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: _clearData, // Clear button to delete all credentials
+          ),
+        ],
       ),
       body: Column(
         children: [
-          Expanded(
-            child: JsonRpcWebView(
-              key: _webViewKey,
-              onMessageReceived: (message) {
-                setState(() {
-                  _rpcResponse = message;
-                });
-              },
+          // Hidden WebView for background JSON-RPC calls
+          Visibility(
+            visible: false,
+            maintainState: true,
+            child: SizedBox(
+              height: 0,
+              child: JsonRpcWebView(
+                key: _webViewKey,
+              ),
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              // Operations with the dock-sdk
-              // _webViewKey.currentState?.sendRpcMessage(
-              //   "dock.init",
-              //   {"address": "wss://knox-1.dock.io"},
-              //   3,
-              // );
-
-              // _webViewKey.currentState?.sendRpcMessage(
-              //   "keyring.initialize",
-              //   {"ss58Format": 21},
-              //   3,
-              // );
-
-              // call credential operation
-              rootBundle
-                  .loadString('assets/dock-sdk/template.json')
-                  .then((jsonContent) {
-                final template = jsonDecode(jsonContent);
-                _webViewKey.currentState?.sendRpcMessage(
-                  "credentials.deriveVCFromPresentation",
-                  template,
-                  // {
-                  //   "proofRequest": template.,
-                  //   "credentials": [
-                  //     {
-                  //       "credential": template.credential,
-                  //       "witness":
-                  //           "0x82e77125fc1204e31a09eed76422a81b9c81514f12db14eb95895cea95c596ad500a837765e459f93d779c027ecd24a8",
-                  //       "attributesToReveal": [
-                  //         "credentialSubject.id",
-                  //         "credentialSubject.dateOfBirth",
-                  //         "id",
-                  //       ]
-                  //     }
-                  //   ]
-                  // },
-                  3,
-                );
-              });
-
-              setState(() {
-                _rpcResponse = 'Loading...';
-              });
-            },
-            child: const Text('Send RPC Message'),
+            onPressed: _importCredential,
+            child: const Text('Scan QR Code'),
           ),
-          Text('RPC Response: $_rpcResponse'),
+          _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Expanded(
+                  child: ListView.builder(
+                    itemCount: _credentials.length,
+                    itemBuilder: (context, index) {
+                      final credential = _credentials[index];
+                      final issuerName = credential['issuer']['name'];
+                      final issuanceDate = credential['issuanceDate'];
+                      final expirationDate = credential['expirationDate'];
+                      final credentialId = credential['id'];
+
+                      return Card(
+                        margin: const EdgeInsets.all(8.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Credential ID: $credentialId',
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text('Issuer: $issuerName'),
+                              Text('Issued on: $issuanceDate'),
+                              Text('Expires on: $expirationDate'),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
         ],
       ),
     );
