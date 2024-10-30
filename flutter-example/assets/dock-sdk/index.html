@@ -1,51 +1,24 @@
 <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Local HTML</title>
-      </head>
-      <body>
-        <h1>Hello from a local HTML file! static file</h1>
-        <script type="text/javascript" src="bundle.js">
-        </script>
-        <script>
-          handleEvent({
-            data: {
-              type: 'json-rpc-request',
-              body: {
-                jsonrpc: '2.0',
-                method: 'dock.init',
-                params: {__args: [{address: 'wss://knox-1.dock.io'}]},
-                id: 3,
-              },
-            },
-          });
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Wallet SDK Webview" />
+    <title>Wallet SDK Webview</title>
+    <script defer="defer" src="main.cc680e43.js"></script>
+    <script defer="defer" src="axios.0fd5060ee28a257d32a2.cjs"></script>
 
-          handleEvent({
-            data: {
-              type: 'json-rpc-request',
-              body: {
-                jsonrpc: '2.0',
-                method: 'keyring.initialize',
-                params: {__args: [{ss58Format: 21}]},
-                id: 2,
-              },
-            },
-          });
-
-          // The WalletSDK will call this function to send messages to Flutter
-          window.ReactNativeWebView = {
-            postMessage: function (message) {
-              Toaster.postMessage(JSON.stringify(message));
-            },
-          }
-
-          // Listen for messages from Flutter
-          window.addEventListener('message', function(event) {
-            console.log('Received event', event.data);
-            handleEvent({
-              data: JSON.parse(event.data),
-            });
-          });
-        </script>
-      </body>
-    </html>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <h1>Wallet SDK Webview</h1>
+    <p>
+      This WebView is hidden within your app and is used exclusively for
+      background message communication between your app and the Wallet SDK. It
+      does not display any UI elements and functions solely for backend
+      communication.
+    </p>
+  </body>
+</html>
