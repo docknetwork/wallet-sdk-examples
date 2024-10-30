@@ -31,42 +31,55 @@ class JsonRpcWebViewState extends State<JsonRpcWebView> {
   }
 
   Future<void> _initializeWebView() async {
+    // Start the timer to measure WebView load time
     _webViewLoadStartTime = DateTime.now();
+
+    // Define platform-specific WebView parameters
     late final PlatformWebViewControllerCreationParams params;
     if (WebViewPlatform.instance is WebKitWebViewPlatform) {
+      // Configurations specific to iOS WebKit WebView
       params = WebKitWebViewControllerCreationParams(
         allowsInlineMediaPlayback: true,
         mediaTypesRequiringUserAction: const <PlaybackMediaTypes>{},
       );
     } else {
+      // Default WebView parameters for other platforms
       params = const PlatformWebViewControllerCreationParams();
     }
 
+    // Create the WebViewController with platform-specific parameters
     final WebViewController controller =
         WebViewController.fromPlatformCreationParams(params);
 
     controller
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
+      ..setJavaScriptMode(
+          JavaScriptMode.unrestricted) // Enable JavaScript in the WebView
+      ..setBackgroundColor(const Color(
+          0x00000000)) // Set WebView background color to transparent
       ..setNavigationDelegate(
         NavigationDelegate(
           onProgress: (int progress) {
+            // Log the current WebView load progress percentage
             debugPrint('WebView is loading (progress : $progress%)');
           },
           onPageStarted: (String url) {
+            // Log when the page starts loading
             debugPrint('Page started loading: $url');
           },
           onPageFinished: (String url) {
+            // Calculate and log total time taken to load the page
             final loadDuration =
                 DateTime.now().difference(_webViewLoadStartTime!);
             debugPrint(
                 'Page finished loading: $url in ${loadDuration.inMilliseconds} ms');
           },
           onWebResourceError: (WebResourceError error) {
+            // Log WebView resource load errors
             debugPrint(
                 'Page resource error: code: ${error.errorCode}, description: ${error.description}');
           },
           onNavigationRequest: (NavigationRequest request) {
+            // Block navigation to YouTube links; allow all other navigation requests
             if (request.url.startsWith('https://www.youtube.com/')) {
               debugPrint('blocking navigation to ${request.url}');
               return NavigationDecision.prevent;
@@ -77,24 +90,32 @@ class JsonRpcWebViewState extends State<JsonRpcWebView> {
         ),
       )
       ..addJavaScriptChannel(
+        // Set up a JavaScript channel named "Toaster" for two-way communication
         'Toaster',
         onMessageReceived: (JavaScriptMessage message) {
+          // Decode incoming message from WebView as JSON
           final jsonMessage = jsonDecode(message.message);
           final id = jsonMessage['id'];
 
           debugPrint('Received message: $jsonMessage');
 
+          // If the message is a log, print it to the debug console
           if (jsonMessage['body']['type'] == 'LOG') {
             debugPrint(jsonMessage['body']['message']);
           }
 
+          // Complete the RPC request using its unique ID, if it exists
           if (_rpcCompleters.containsKey(id)) {
             _rpcCompleters[id]?.complete(message.message);
             _rpcCompleters.remove(id);
           }
+
+          // In case of a message invoked by the WebView, handle it here
+          // e.g: 
+          // Data store updates that you might want to persist in the flutter side
+          // In that case the webview can invoke a method to ensure the data is persisted
         },
       );
-
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
       (controller.platform as AndroidWebViewController)
