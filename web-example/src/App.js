@@ -361,7 +361,7 @@ function App() {
         <Button
           variant="contained"
           onClick={() => {
-            navigator.clipboard.writeText(defaultDID);
+            // Implement fetch message logic
           }}
         >
           Fetch Messages
