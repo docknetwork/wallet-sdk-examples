@@ -13,7 +13,7 @@ import {
   initializeCloudWallet,
 } from "@docknetwork/wallet-sdk-core/lib/cloud-wallet";
 import { setLocalStorageImpl } from "@docknetwork/wallet-sdk-data-store-web/lib/localStorageJSON";
-import { edvService } from '@docknetwork/wallet-sdk-wasm/lib/services/edv';
+import { edvService } from "@docknetwork/wallet-sdk-wasm/lib/services/edv";
 
 const EDV_URL = "https://edv.dock.io";
 const EDV_AUTH_KEY = "DOCKWALLET-TEST";
@@ -25,6 +25,8 @@ function App() {
   const [documents, setDocuments] = useState([]);
   const [formattedCredentials, setFormattedCredentials] = useState([]);
   const [credentialProvider, setCredentialProvider] = useState(null);
+  const [didProvider, setDidProvider] = useState(null);
+  const [defaultDID, setDefaultDID] = useState(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [verifyModalOpen, setVerifyModalOpen] = useState(false);
   const [cloudWallet, setCloudWallet] = useState();
@@ -69,15 +71,10 @@ function App() {
   }, [walletKeys]);
 
   const handleImportCredential = async () => {
-    console.log("import credential", {
-      credentialUrl,
-      password,
+    await credentialProvider.importCredentialFromURI({
+      uri: credentialUrl,
+      didProvider,
     });
-    const { data: credential } = await axios.get(
-      `${credentialUrl}?p=${btoa(password)}`
-    );
-
-    await credentialProvider.addCredential(credential);
 
     refreshDocuments();
     setImportModalOpen(false);
@@ -127,6 +124,11 @@ function App() {
 
       console.log("Wallet created", wallet);
       setCredentialProvider(credentialProvider);
+
+      const didProvider = createDIDProvider({ wallet });
+      setDidProvider(didProvider);
+
+      setDefaultDID(await didProvider.getDefaultDID());
       setWallet(wallet);
     } catch (err) {
       console.error(err);
@@ -141,7 +143,7 @@ function App() {
   }, [credentialProvider]);
 
   async function refreshDocuments() {
-    const allDocs = await edvService.find({})
+    const allDocs = await edvService.find({});
     console.log("edv docs", allDocs);
 
     const creds = await credentialProvider.getCredentials();
@@ -167,7 +169,6 @@ function App() {
   const handleVerifyCredential = async () => {
     setLoading(true);
     const { data: proofRequest } = await axios.get(proofRequestUrl);
-    const didProvider = createDIDProvider({ wallet });
     const controller = createVerificationController({
       wallet,
       credentialProvider,
@@ -346,6 +347,26 @@ function App() {
           Clear EDV
         </Button>
       </Box>
+      <Box display="flex" gap={2} justifyContent="center" alignItems="center">
+        <b>Default DID:</b>
+        {defaultDID}
+        <Button
+          variant="contained"
+          onClick={() => {
+            navigator.clipboard.writeText(defaultDID);
+          }}
+        >
+          Copy
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            navigator.clipboard.writeText(defaultDID);
+          }}
+        >
+          Fetch Messages
+        </Button>
+      </Box>
       <div>
         {formattedCredentials.map((document) => (
           <Box key={document.id} bgcolor="#ccc" p={2} m={2}>
@@ -361,18 +382,10 @@ function App() {
         <Box sx={modalStyle}>
           <h2>Import Credential</h2>
           <TextField
-            label="Credential URL"
+            label="Credential Offer URL"
             fullWidth
             value={credentialUrl}
             onChange={(e) => setCredentialUrl(e.target.value)}
-            margin="normal"
-          />
-          <TextField
-            label="Password"
-            type="password"
-            fullWidth
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             margin="normal"
           />
           <Button
