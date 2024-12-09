@@ -3,8 +3,11 @@ import { Box, Button, Modal, TextField } from "@mui/material";
 import "./App.css";
 import { createWallet } from "@docknetwork/wallet-sdk-core/lib/wallet";
 import { createCredentialProvider } from "@docknetwork/wallet-sdk-core/lib/credential-provider";
+import { createMessageProvider } from "@docknetwork/wallet-sdk-core/lib/message-provider";
+
 import { createDIDProvider } from "@docknetwork/wallet-sdk-core/lib/did-provider";
 import { createVerificationController } from "@docknetwork/wallet-sdk-core/lib/verification-controller";
+
 import { createDataStore } from "@docknetwork/wallet-sdk-data-store-web/lib/index";
 import { getVCData } from "@docknetwork/prettyvc";
 import axios from "axios";
@@ -31,7 +34,7 @@ function App() {
   const [verifyModalOpen, setVerifyModalOpen] = useState(false);
   const [cloudWallet, setCloudWallet] = useState();
   const [credentialUrl, setCredentialUrl] = useState("");
-  const [password, setPassword] = useState("");
+  const [messageProvider, setMessageProvider] = useState("");
   const [proofRequestUrl, setProofRequestUrl] = useState();
   const [verifyStep, setVerifyStep] = useState(1);
   const [selectedCredential, setSelectedCredential] = useState(null);
@@ -79,7 +82,6 @@ function App() {
     refreshDocuments();
     setImportModalOpen(false);
     setCredentialUrl("");
-    setPassword("");
   };
 
   async function initializeWallet() {
@@ -129,6 +131,20 @@ function App() {
       setDidProvider(didProvider);
 
       setDefaultDID(await didProvider.getDefaultDID());
+
+      const messageProvider = createMessageProvider({ wallet, didProvider });
+
+      setMessageProvider(messageProvider);
+
+      messageProvider.addMessageListener(async (message) => {
+        console.log("Message received", message);
+
+        if (message.credentials) {
+          message.credentials.forEach(async (credential) => {
+            await credentialProvider.addCredential(credential);
+          });
+        }
+      });
       setWallet(wallet);
     } catch (err) {
       console.error(err);
@@ -302,7 +318,6 @@ function App() {
           onClick={() => {
             setImportModalOpen(true);
             setCredentialUrl("");
-            setPassword("");
           }}
         >
           Import Credential
@@ -361,7 +376,7 @@ function App() {
         <Button
           variant="contained"
           onClick={() => {
-            // Implement fetch message logic
+            messageProvider.fetchMessages();
           }}
         >
           Fetch Messages
