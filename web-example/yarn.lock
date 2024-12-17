@@ -3306,6 +3306,17 @@
   dependencies:
     "@docknetwork/credential-sdk" "0.12.0"
 
+"@docknetwork/minimal-cipher@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@docknetwork/minimal-cipher/-/minimal-cipher-5.2.1.tgz#0a965117e326a97d9a2c8435d13f7a186ec746b8"
+  integrity sha512-7jL1cVALawvgDkibDbCYDkRRogQphoOcozFxNwT07VnJkrbczHK59IHa7Ia62CT8Fx7qgUmqEgKzfPqI71eOsw==
+  dependencies:
+    "@noble/ed25519" "^1.6.1"
+    "@stablelib/chacha" "^1.0.1"
+    "@stablelib/chacha20poly1305" "^1.0.1"
+    base58-universal "^1.0.0"
+    base64url-universal "^1.1.0"
+
 "@docknetwork/node-types@^0.17.0":
   version "0.17.0"
   resolved "https://registry.yarnpkg.com/@docknetwork/node-types/-/node-types-0.17.0.tgz#ca0ddb5b819e012e8f2f112353008325de4f3e33"
@@ -3415,6 +3426,16 @@
   dependencies:
     "@digitalbazaar/did-method-key" "^2.0.0"
     uuid "^8.3.2"
+
+"@docknetwork/wallet-sdk-relay-service@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-relay-service/-/wallet-sdk-relay-service-1.4.1.tgz#fa2d823500ceadbade67a813d82f3f891bb720f7"
+  integrity sha512-C3bdMWNU75Q+voRDO7oZrjauKmQWaHARDZeNiQ7mNJ647ML0knCgK+Fl0W+BCn7CbLLqaw7oFs7pSfYVNmUg+A==
+  dependencies:
+    "@docknetwork/minimal-cipher" "^5.2.1"
+    "@docknetwork/sdk" "8.6.0"
+    "@docknetwork/wallet-sdk-wasm" "1.4.0"
+    uuid "^9.0.0"
 
 "@docknetwork/wallet-sdk-wasm@1.4.0", "@docknetwork/wallet-sdk-wasm@^1.4.0":
   version "1.4.0"
@@ -4204,7 +4225,7 @@
   dependencies:
     "@noble/hashes" "1.6.0"
 
-"@noble/ed25519@^1.6.0":
+"@noble/ed25519@^1.6.0", "@noble/ed25519@^1.6.1":
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/@noble/ed25519/-/ed25519-1.7.3.tgz#57e1677bf6885354b466c38e2b620c62f45a7123"
   integrity sha512-iR8GBkDt0Q3GyaVcIu7mSsVIqnFbkbRzGLWlvhwunacoLwt4J3swfKhfaM6rN6WY+TBGoYT1GtT1mIh2/jGbRQ==
