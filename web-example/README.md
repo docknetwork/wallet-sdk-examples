@@ -1,10 +1,33 @@
-# Wallet sdk web examples
-This is an examples on how to install the Dock Wallet SDK in a web application.
+# Cloud Wallet Demo
 
-# Installation steps
+This wallet application is a React-based implementation that enables users to create, manage, import, verify, and interact with Verifiable Credentials (VCs) in a secure and decentralized manner. It leverages the **Dock Wallet SDK** and **Dock Cloud Wallet** for managing credentials and data storage.
 
-```bash
-yarn install
-yarn start
-```
+## Usage Instructions
 
+1. **Start the Application:**
+   - Run the app with the following commands:
+     ```bash
+     npm install
+     npm start
+     ```
+
+2. **Initialize the Wallet:**
+   - Option 1: Upload an existing wallet key file.
+   - Option 2: Generate a new wallet by clicking "Create New Wallet."
+
+3. **Import a Credential:**
+   - Click **"Import Credential"** and enter the Credential Offer URL.
+   - Also, you can use DID distribution
+     - Fetch DIDComm messages using the **"Fetch Messages"** button.
+
+4. **View and Manage Credentials:**
+   - Use the **"Refresh"** button to reload credentials.
+   - Credentials are displayed in a structured format.
+
+5. **Verify a Credential:**
+   - Click **"Verify Credential"** and provide a **Proof Request URL**.
+   - Follow the steps to select a credential and send the proof.
+
+6. **Cloud Storage Operations:**
+   - Use **"Clear EDV"** to reset cloud-stored documents.
+   - Sync with the cloud wallet via **"Refresh."**
