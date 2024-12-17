@@ -1,6 +1,6 @@
 # Cloud Wallet Demo
 
-This wallet application is a React-based implementation that enables users to create, manage, import, verify, and interact with Verifiable Credentials (VCs) in a secure and decentralized manner. It leverages the **Dock Wallet SDK** and **Dock Cloud Wallet** for managing credentials and data storage.
+This web application leverages the **Dock Wallet SDK** and **Dock Cloud Wallet** for managing credentials and data storage.
 
 ## Usage Instructions
 
