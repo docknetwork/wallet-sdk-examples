@@ -375,8 +375,9 @@ function App() {
         </Button>
         <Button
           variant="contained"
-          onClick={() => {
-            messageProvider.fetchMessages();
+          onClick={async () => {
+            await messageProvider.fetchMessages();
+            await messageProvider.processDIDCommMessages();
           }}
         >
           Fetch Messages

@@ -3427,10 +3427,10 @@
     "@digitalbazaar/did-method-key" "^2.0.0"
     uuid "^8.3.2"
 
-"@docknetwork/wallet-sdk-relay-service@0.4.23":
-  version "0.4.23"
-  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-relay-service/-/wallet-sdk-relay-service-0.4.23.tgz#0b215f01ffd4e1242b9c800e181d3cb1130c41bc"
-  integrity sha512-n3P0NNA7EPSmIhBgXugFDf7Lpf43RoIloxmT3CfhCLBYq2P8rQdREFFHfuHAqMUffL1+pTT6LHkPOxk5ISwAeQ==
+"@docknetwork/wallet-sdk-relay-service@1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@docknetwork/wallet-sdk-relay-service/-/wallet-sdk-relay-service-1.4.1.tgz#fa2d823500ceadbade67a813d82f3f891bb720f7"
+  integrity sha512-C3bdMWNU75Q+voRDO7oZrjauKmQWaHARDZeNiQ7mNJ647ML0knCgK+Fl0W+BCn7CbLLqaw7oFs7pSfYVNmUg+A==
   dependencies:
     "@docknetwork/minimal-cipher" "^5.2.1"
     "@docknetwork/sdk" "8.6.0"
