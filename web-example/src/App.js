@@ -165,7 +165,6 @@ function App() {
 
   useEffect(() => {
     if (messageProvider) {
-      console.log("adding message listener");
       return messageProvider.addMessageListener(async (message) => {
         console.log("Message received", message);
 
