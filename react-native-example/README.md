@@ -1,5 +1,5 @@
 # Wallet SDK Demo
-React-native project running the dock wallet-sdk
+React-native project running the Truvera wallet-sdk
 
 # Installation
 
