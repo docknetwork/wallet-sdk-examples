@@ -2,7 +2,7 @@
 
 **WebView Project**
 
-This project serves as the WebView logic implementation for Dock's Wallet SDK. It creates a JavaScript bundle that handles wallet-related operations and sends data between the JavaScript and Flutter environments using a JSON-RPC protocol.
+This project serves as the WebView logic implementation for Truvera's Wallet SDK. It creates a JavaScript bundle that handles wallet-related operations and sends data between the JavaScript and Flutter environments using a JSON-RPC protocol.
 
 #### **Project Structure**
 
@@ -53,5 +53,5 @@ After testing, you can copy `build/` files to your Flutter project’s assets fo
 
 #### **Notes**
 
-- This WebView project is designed to integrate specifically with Dock’s Wallet SDK. Refer to the Wallet SDK documentation for more details on available methods and configurations.
+- This WebView project is designed to integrate specifically with Truvera’s Wallet SDK. Refer to the Wallet SDK documentation for more details on available methods and configurations.
 
