@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import "./App.css";
 import { createWallet } from "@docknetwork/wallet-sdk-core/lib/wallet";
@@ -135,16 +135,6 @@ function App() {
       const messageProvider = createMessageProvider({ wallet, didProvider });
 
       setMessageProvider(messageProvider);
-
-      messageProvider.addMessageListener(async (message) => {
-        console.log("Message received", message);
-
-        if (message.credentials) {
-          message.credentials.forEach(async (credential) => {
-            await credentialProvider.addCredential(credential);
-          });
-        }
-      });
       setWallet(wallet);
     } catch (err) {
       console.error(err);
@@ -152,19 +142,8 @@ function App() {
     setLoading(false);
   }
 
-  useEffect(() => {
-    if (credentialProvider) {
-      refreshDocuments();
-    }
-  }, [credentialProvider]);
-
-  async function refreshDocuments() {
-    const allDocs = await edvService.find({});
-    console.log("edv docs", allDocs);
-
+  const refreshDocuments = useCallback(async () => {
     const creds = await credentialProvider.getCredentials();
-    const docs = await wallet.getAllDocuments();
-
     setFormattedCredentials(
       await Promise.all(
         creds.map((c) =>
@@ -175,12 +154,30 @@ function App() {
         )
       )
     );
-    console.log("refreshing documents", {
-      creds,
-      docs,
-    });
     setDocuments(creds);
-  }
+  }, [credentialProvider, setFormattedCredentials, setDocuments]);
+
+  useEffect(() => {
+    if (credentialProvider) {
+      refreshDocuments();
+    }
+  }, [credentialProvider, refreshDocuments]);
+
+  useEffect(() => {
+    if (messageProvider) {
+      return messageProvider.addMessageListener(async (message) => {
+        console.log("Message received", message);
+
+        if (message.body.credentials) {
+          console.log("adding credential to the wallet");
+          message.body.credentials.forEach(async (credential) => {
+            await credentialProvider.addCredential(credential);
+            refreshDocuments();
+          });
+        }
+      });
+    }
+  }, [messageProvider, credentialProvider, refreshDocuments]);
 
   const handleVerifyCredential = async () => {
     setLoading(true);
@@ -253,7 +250,7 @@ function App() {
     setLoading(true);
     try {
       const newKeys = await generateEDVKeys();
-
+      console.log("generated new keys for the wallet");
       localStorage.setItem("keys", JSON.stringify(newKeys));
       setWalletKeys(newKeys);
     } catch (err) {
