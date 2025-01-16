@@ -1,4 +1,4 @@
-# Wallet sdk web examples
+# Wallet SDK Node.js examples
 This is an examples on how to install the Dock Wallet SDK in a nodejs application.
 
 ## Installation steps
@@ -28,7 +28,7 @@ Note:
 Next, generate the OpenID issuer and the credential offer by running the following command:
 
 ```bash
-node generate-oid4vc-offer.js
+yarn generate-oid4vc-offer
 ```
 
 The output should look like this:
@@ -54,7 +54,7 @@ In a real-world scenario, this credential offer URL would typically be rendered 
 Now you can run the Wallet SDK example to import the credential into the wallet:
 
 ```bash
-yarn oid4vc-example <OID4VC_URL>
+yarn oid4vc-example
 ```
 
 The example above creates an instance of the Wallet SDK, imports the credential into the wallet, and then logs the list of credentials available in the user database. Note that the imported credential is stored locally on the device, and in this Node.js example, it uses SQLite for storage.
@@ -64,7 +64,7 @@ The example above creates an instance of the Wallet SDK, imports the credential 
 In this example, we will show how to use the SDK to verify a credential.
 
 ``` bash
-yarn oid4vc-example
+yarn verification-example
 
 ```
 
