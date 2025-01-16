@@ -28,7 +28,7 @@ Note:
 Next, generate the OpenID issuer and the credential offer by running the following command:
 
 ```bash
-node generate-oid4vc-offer.js
+yarn generate-oid4vc-offer
 ```
 
 The output should look like this:
