@@ -1,6 +1,6 @@
 # Cloud Wallet Demo
 
-This web application leverages the **Dock Wallet SDK** and **Dock Cloud Wallet** for managing credentials and data storage.
+This web application leverages the **Truvera Wallet SDK** and **Truvera Cloud Wallet** for managing credentials and data storage.
 
 ## Usage Instructions
 

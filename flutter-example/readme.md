@@ -1,6 +1,6 @@
-### Flutter App Using Dock Wallet SDK WebView
+### Flutter App Using Truvera Wallet SDK WebView
 
-This Flutter project demonstrates how to integrate Dock's Wallet SDK (written in JavaScript) by loading it within a WebView. The app utilizes JSON-RPC calls to interact with the wallet’s functionality, allowing credential management and import via a web bundle.
+This Flutter project demonstrates how to integrate Truvera's Wallet SDK (written in JavaScript) by loading it within a WebView. The app utilizes JSON-RPC calls to interact with the wallet’s functionality, allowing credential management and import via a web bundle.
 
 #### **Project Structure**
 
@@ -43,7 +43,7 @@ flutter-project/
 
 #### **Features**
 
-- **JSON-RPC Communication**: The `JsonRpcWebView` widget establishes a JSON-RPC interface with the WebView, enabling interaction with Dock’s Wallet SDK methods such as `importCredential`, `getCredentials`, and `clearData`.
+- **JSON-RPC Communication**: The `JsonRpcWebView` widget establishes a JSON-RPC interface with the WebView, enabling interaction with Truvera’s Wallet SDK methods such as `importCredential`, `getCredentials`, and `clearData`.
 - **UI Components**: The UI provides options to view, import, refresh, and clear credentials using simple controls.
 
 #### **Usage**

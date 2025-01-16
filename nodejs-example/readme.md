@@ -1,5 +1,5 @@
 # Wallet sdk web examples
-This is an examples on how to install the Dock Wallet SDK in a nodejs application.
+This is an examples on how to install the Truvera Wallet SDK in a nodejs application.
 
 ## Installation steps
 
@@ -14,16 +14,16 @@ You can read more about OID4VC in [our docs](https://docs.dock.io/developer-docu
 
 ### Step 1: Generate an OpenID Issuer and Credential Offer
 
-To get started, define your environment variables to access the Certs API:
+To get started, define your environment variables to access the Truvera API:
 
 ```bash
-export CERTS_API_KEY=<Your Certs API Key>
-export CERTS_API_URL=https://api.dock.io
+export CERTS_API_KEY=<Your Truvera API Key>
+export CERTS_API_URL=https://api.truvera.io
 export ISSUER_DID=<Issuer DID>
 ```
 Note: 
-* API keys can be defined on the [API Keys](https://certs.dock.io/keys) page in Certs
-* Issuer DIDs can be viewed on the [Organization Profiles](https://certs.dock.io/dids) page in Certs 
+* API keys can be defined on the [API Keys](https://truvera.io/keys) page in Truvera Workspace
+* Issuer DIDs can be viewed on the [Organization Profiles](https://truvera.io/dids) page in Truvera Workspace 
 
 Next, generate the OpenID issuer and the credential offer by running the following command:
 
