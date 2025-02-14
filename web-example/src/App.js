@@ -1,25 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Box, Button, Modal, TextField } from "@mui/material";
 import "./App.css";
-import { createWallet } from "@docknetwork/wallet-sdk-core/lib/wallet";
-import { createCredentialProvider } from "@docknetwork/wallet-sdk-core/lib/credential-provider";
-import { createMessageProvider } from "@docknetwork/wallet-sdk-core/lib/message-provider";
-
-import { createDIDProvider } from "@docknetwork/wallet-sdk-core/lib/did-provider";
 import { createVerificationController } from "@docknetwork/wallet-sdk-core/lib/verification-controller";
-
-import { createDataStore } from "@docknetwork/wallet-sdk-data-store-web/lib/index";
 import { getVCData } from "@docknetwork/prettyvc";
 import axios from "axios";
-import {
-  generateEDVKeys,
-  initializeCloudWallet,
-} from "@docknetwork/wallet-sdk-core/lib/cloud-wallet";
 import { setLocalStorageImpl } from "@docknetwork/wallet-sdk-data-store-web/lib/localStorageJSON";
 import { edvService } from "@docknetwork/wallet-sdk-wasm/lib/services/edv";
 
-const EDV_URL = "https://edv.dock.io";
-const EDV_AUTH_KEY = "DOCKWALLET-TEST";
+import useCloudWallet from './hooks/useCloudWallet';
 
 setLocalStorageImpl(global.localStorage);
 
@@ -27,19 +15,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [documents, setDocuments] = useState([]);
   const [formattedCredentials, setFormattedCredentials] = useState([]);
-  const [credentialProvider, setCredentialProvider] = useState(null);
-  const [didProvider, setDidProvider] = useState(null);
-  const [defaultDID, setDefaultDID] = useState(null);
   const [importModalOpen, setImportModalOpen] = useState(false);
   const [verifyModalOpen, setVerifyModalOpen] = useState(false);
-  const [cloudWallet, setCloudWallet] = useState();
   const [credentialUrl, setCredentialUrl] = useState("");
-  const [messageProvider, setMessageProvider] = useState("");
   const [proofRequestUrl, setProofRequestUrl] = useState();
   const [verifyStep, setVerifyStep] = useState(1);
   const [selectedCredential, setSelectedCredential] = useState(null);
-  const [wallet, setWallet] = useState(null);
-
   const [walletKeys, setWalletKeys] = useState(null);
   const [uploadError, setUploadError] = useState(null);
 
@@ -66,14 +47,23 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if (walletKeys) {
-      console.log("walletKeys", walletKeys);
-      initializeWallet();
-    }
-  }, [walletKeys]);
+  const {
+    loading: cloudWalletLoading,
+    cloudWallet,
+    wallet,
+    credentialProvider,
+    didProvider,
+    defaultDID,
+    messageProvider,
+    provisionNewWallet,
+  } = useCloudWallet(walletKeys);
+
 
   const handleImportCredential = async () => {
+    if (!credentialProvider) {
+      return
+    }
+
     await credentialProvider.importCredentialFromURI({
       uri: credentialUrl,
       didProvider,
@@ -84,65 +74,11 @@ function App() {
     setCredentialUrl("");
   };
 
-  async function initializeWallet() {
-    // Mock implementation
-    console.log("Initializing wallet with keys:", walletKeys);
-
-    setLoading(true);
-
-    try {
-      const dataStore = await createDataStore({
-        databasePath: "dock-wallet",
-        defaultNetwork: "testnet",
-      });
-
-      // Initialize cloud wallet
-      const _cloudWallet = await initializeCloudWallet({
-        dataStore,
-        edvUrl: EDV_URL,
-        agreementKey: walletKeys.agreementKey,
-        verificationKey: walletKeys.verificationKey,
-        hmacKey: walletKeys.hmacKey,
-        authKey: EDV_AUTH_KEY,
-      });
-
-      setCloudWallet(_cloudWallet);
-
-      try {
-        // Pull documents from EDV and add to local wallet
-        await _cloudWallet.pullDocuments();
-      } catch (err) {
-        console.error("Error pulling documents from EDV");
-        console.error(err);
-      }
-
-      const wallet = await createWallet({
-        dataStore,
-      });
-
-      const credentialProvider = await createCredentialProvider({
-        wallet,
-      });
-
-      console.log("Wallet created", wallet);
-      setCredentialProvider(credentialProvider);
-
-      const didProvider = createDIDProvider({ wallet });
-      setDidProvider(didProvider);
-
-      setDefaultDID(await didProvider.getDefaultDID());
-
-      const messageProvider = createMessageProvider({ wallet, didProvider });
-
-      setMessageProvider(messageProvider);
-      setWallet(wallet);
-    } catch (err) {
-      console.error(err);
-    }
-    setLoading(false);
-  }
-
   const refreshDocuments = useCallback(async () => {
+    if (!credentialProvider) {
+      return;
+    }
+
     const creds = await credentialProvider.getCredentials();
     setFormattedCredentials(
       await Promise.all(
@@ -155,7 +91,7 @@ function App() {
       )
     );
     setDocuments(creds);
-  }, [credentialProvider, setFormattedCredentials, setDocuments]);
+  }, [credentialProvider]);
 
   useEffect(() => {
     if (credentialProvider) {
@@ -164,22 +100,30 @@ function App() {
   }, [credentialProvider, refreshDocuments]);
 
   useEffect(() => {
-    if (messageProvider) {
-      return messageProvider.addMessageListener(async (message) => {
-        console.log("Message received", message);
-
-        if (message.body.credentials) {
-          console.log("adding credential to the wallet");
-          message.body.credentials.forEach(async (credential) => {
-            await credentialProvider.addCredential(credential);
-            refreshDocuments();
-          });
-        }
-      });
+    if (!messageProvider || !credentialProvider) {
+      return;
     }
+
+    const unsubscribe = messageProvider.addMessageListener(async (message) => {
+      console.log("Message received", message);
+
+      if (message.body.credentials) {
+        console.log("adding credential to the wallet");
+        message.body.credentials.forEach(async (credential) => {
+          await credentialProvider.addCredential(credential);
+          refreshDocuments();
+        });
+      }
+    });
+
+    return () => unsubscribe && unsubscribe();
   }, [messageProvider, credentialProvider, refreshDocuments]);
 
   const handleVerifyCredential = async () => {
+    if (!wallet || !credentialProvider || !didProvider) {
+      return;
+    }
+
     setLoading(true);
     const { data: proofRequest } = await axios.get(proofRequestUrl);
     const controller = createVerificationController({
@@ -195,7 +139,7 @@ function App() {
     const attributesToReveal = ["credentialSubject.name"];
 
     controller.selectedCredentials.set(credential.id, {
-      credential: credential,
+      credential,
       attributesToReveal,
     });
 
@@ -249,12 +193,12 @@ function App() {
   const handleCreateWallet = async () => {
     setLoading(true);
     try {
-      const newKeys = await generateEDVKeys();
+      const newKeys = await edvService.generateKeys();
       console.log("generated new keys for the wallet");
       localStorage.setItem("keys", JSON.stringify(newKeys));
       setWalletKeys(newKeys);
     } catch (err) {
-      console.errorq("Error generating keys", err);
+      console.error("Error generating keys", err);
     }
     setLoading(false);
   };
@@ -262,11 +206,12 @@ function App() {
   console.log({
     walletKeys,
     loading,
+    cloudWalletLoading,
     documents,
     formattedCredentials,
   });
 
-  if (loading) {
+  if (cloudWalletLoading || loading) {
     return (
       <div className="App">
         <Box className="App-header" p={5}>
@@ -350,36 +295,45 @@ function App() {
         >
           Clear Wallet
         </Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            cloudWallet.clearEdvDocuments();
-          }}
-        >
-          Clear EDV
-        </Button>
+        {cloudWallet && (
+          <Button
+            variant="contained"
+            onClick={() => cloudWallet.clearEdvDocuments()}
+          >
+            Clear EDV
+          </Button>
+        )}
       </Box>
-      <Box display="flex" gap={2} justifyContent="center" alignItems="center">
-        <b>Default DID:</b>
-        {defaultDID}
+      {!defaultDID ? (
         <Button
           variant="contained"
-          onClick={() => {
-            navigator.clipboard.writeText(defaultDID);
-          }}
+          onClick={() => provisionNewWallet()}
         >
-          Copy
+          Create Default DID
         </Button>
-        <Button
-          variant="contained"
-          onClick={async () => {
-            await messageProvider.fetchMessages();
-            await messageProvider.processDIDCommMessages();
-          }}
-        >
-          Fetch Messages
-        </Button>
-      </Box>
+      ) : (
+        <Box display="flex" gap={2} justifyContent="center" alignItems="center">
+          <b>Default DID:</b>
+          {defaultDID}
+          <Button
+            variant="contained"
+            onClick={() => {
+              navigator.clipboard.writeText(defaultDID);
+            }}
+          >
+            Copy
+          </Button>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              await messageProvider.fetchMessages();
+              await messageProvider.processDIDCommMessages();
+            }}
+          >
+            Fetch Messages
+          </Button>
+        </Box>
+      )}
       <div>
         {formattedCredentials.map((document) => (
           <Box key={document.id} bgcolor="#ccc" p={2} m={2}>
